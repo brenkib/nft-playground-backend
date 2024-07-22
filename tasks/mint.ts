@@ -2,7 +2,7 @@ import { task, vars } from 'hardhat/config'
 import contract from '../artifacts/contracts/BrenkibNFT.sol/BrenkibNFT.json'
 import { ethers } from 'ethers'
 
-const ABI = contract.abi
+const ABI = contract ? contract.abi : [];
 const CONTRACT_OWNER_PRIVATE_KEY = vars.get('PRIVATE_KEY')
 const CONTRACT_ADDRESS = vars.get('CONTRACT_ADDRESS')
 const INFURA_API_KEY = vars.get('INFURA_API_KEY')
