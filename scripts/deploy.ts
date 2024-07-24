@@ -1,6 +1,4 @@
 import hre, { network } from 'hardhat'
-// @ts-ignore
-import BrenkibNFTModule from '../ignition/modules/BrenkibNFT'
 import { vars } from 'hardhat/config'
 
 
