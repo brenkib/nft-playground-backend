@@ -1,4 +1,4 @@
-import hre, { network } from 'hardhat'
+import hre, { ethers, network, upgrades } from 'hardhat'
 import { vars } from 'hardhat/config'
 
 
@@ -15,14 +15,15 @@ async function main() {
     }
 
     const [owner] = await hre.ethers.getSigners();
-    const BrenkibNFT = await hre.ethers.getContractFactory("BrenkibNFT", owner);
-    const contract = await BrenkibNFT.deploy(owner, { gasLimit: 1500000 });
-    await contract.waitForDeployment();
-    console.log(`Contract Address: ${contract.target}`);
+    const BrenkibNFT = await ethers.getContractFactory("BrenkibNFTUpgradable", owner);
+    const instance = await upgrades.deployProxy(BrenkibNFT, [owner.address]);
+    await instance.waitForDeployment();
+
+    console.log(`Proxy Address: ${instance.target}`);
 
     // Mint 1 nft at the start
-    await contract.safeMint(ACCOUNT, TOKEN_URI);
-    const balance = await contract.balanceOf(ACCOUNT);
+    await instance.safeMint(ACCOUNT, TOKEN_URI);
+    const balance = await instance.balanceOf(ACCOUNT);
     console.log(`Balance: ${balance}`);
 }
 

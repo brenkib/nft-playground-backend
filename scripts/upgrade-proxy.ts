@@ -3,6 +3,7 @@ import { vars } from 'hardhat/config'
 
 
 const ACCOUNT = vars.get("ACCOUNT");
+const INSTANCE_ADDRESS = vars.get("INSTANCE_ADDRESS");
 
 async function main() {
     if (network.name === "hardhat") {
@@ -14,7 +15,9 @@ async function main() {
     }
 
     // you should get this after deploying proxy script
-    const INSTANCE_ADDRESS = getInstanceArg();
+    if (!INSTANCE_ADDRESS) {
+        throw new Error("No INSTANCE_ADDRESS is set for this script");
+    }
 
     const [owner] = await hre.ethers.getSigners();
 
@@ -26,22 +29,6 @@ async function main() {
 
     const balance = await upgraded.balanceOf(ACCOUNT);
     console.log(`Balance after upgrade: ${balance}`);
-}
-
-const getInstanceArg = () => {
-    // Checks for --instance and if it has a value
-    const customIndex = process.argv.indexOf('--instance');
-    let customValue;
-
-    if (customIndex > -1) {
-        // Retrieve the value after --custom
-        customValue = process.argv[customIndex + 1];
-    }
-
-    if (!customValue) {
-        throw new Error(`Invalid instance address`);
-    }
-    return customValue;
 }
 
 main().catch(console.error);
