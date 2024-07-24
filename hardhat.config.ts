@@ -1,6 +1,10 @@
 import "@nomicfoundation/hardhat-toolbox";
 import "@openzeppelin/hardhat-upgrades";
-import { HardhatUserConfig, vars } from 'hardhat/config'
+import { HardhatUserConfig, vars } from 'hardhat/config';
+
+import "./tasks/upgrade";
+import "./tasks/mint";
+import "./tasks/deploy-proxy";
 
 const INFURA_API_KEY = vars.get("INFURA_API_KEY");
 const accounts = vars.has("PRIVATE_KEY") ? [vars.get("PRIVATE_KEY")] : [];
