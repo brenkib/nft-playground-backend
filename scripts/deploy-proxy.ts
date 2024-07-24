@@ -1,9 +1,9 @@
-import hre, { ethers, network, upgrades } from 'hardhat'
+import hre, { network } from 'hardhat'
 import { vars } from 'hardhat/config'
 
 
 const ACCOUNT = vars.get("ACCOUNT");
-
+const TOKEN_URI = vars.get("TOKEN_URI");
 
 async function main() {
     if (network.name === "hardhat") {
@@ -14,35 +14,16 @@ async function main() {
         );
     }
 
-    // you should get this after deploying proxy script
-    const INSTANCE_ADDRESS = getInstanceArg();
-
     const [owner] = await hre.ethers.getSigners();
+    const BrenkibNFT = await hre.ethers.getContractFactory("BrenkibNFT", owner);
+    const contract = await BrenkibNFT.deploy(owner, { gasLimit: 1500000 });
+    await contract.waitForDeployment();
+    console.log(`Contract Address: ${contract.target}`);
 
-    const BrenkibNFT2 = await ethers.getContractFactory("BrenkibNFTUpgradable2", owner);
-    const upgraded = await upgrades.upgradeProxy(INSTANCE_ADDRESS, BrenkibNFT2);
-    await upgraded.waitForDeployment();
-
-    console.log("BrenkibNFT deployed to same proxy:", await upgraded.getAddress());
-
-    const balance = await upgraded.balanceOf(ACCOUNT);
-    console.log(`Balance after upgrade: ${balance}`);
-}
-
-const getInstanceArg = () => {
-    // Checks for --instance and if it has a value
-    const customIndex = process.argv.indexOf('--instance');
-    let customValue;
-
-    if (customIndex > -1) {
-        // Retrieve the value after --custom
-        customValue = process.argv[customIndex + 1];
-    }
-
-    if (!customValue) {
-        throw new Error(`Invalid instance address`);
-    }
-    return customValue;
+    // Mint 1 nft at the start
+    await contract.safeMint(ACCOUNT, TOKEN_URI);
+    const balance = await contract.balanceOf(ACCOUNT);
+    console.log(`Balance: ${balance}`);
 }
 
 main().catch(console.error);
