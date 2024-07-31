@@ -1,18 +1,15 @@
 // SPDX-License-Identifier: MIT
 // Compatible with OpenZeppelin Contracts ^5.0.0
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.22;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import "@layerzerolabs/lz-evm-oapp-v2/contracts/oft/OFT.sol";
 
-contract BrenkibERC20 is ERC20, ERC20Burnable, Ownable, ERC20Permit {
-    constructor(address initialOwner)
-    ERC20("BrenkibERC20", "BRN20")
-    Ownable(initialOwner)
-    ERC20Permit("BrenkibERC20")
-    {
+contract BrenkibERC20 is OFT {
+    constructor(
+        address _lzEndpoint,
+        address _delegate
+    ) OFT("BrenkibERC20", "BRN20", _lzEndpoint, _delegate) Ownable(_delegate) {
         _mint(msg.sender, 100 * 10 ** decimals());
     }
 
