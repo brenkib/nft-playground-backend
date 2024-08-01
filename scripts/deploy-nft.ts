@@ -4,7 +4,7 @@ import { vars } from 'hardhat/config'
 
 const ACCOUNT = vars.get("ACCOUNT");
 // Address of deployed BrenkibERC20 token
-const ERC20Token = "0x0E474803Dc721F41F789C36bCEc5F36912fD820B";
+const ERC20Token = "0x6ccA6E0943277780da2D9C0bb7e863B6Dbf36B05";
 const TOKEN_URI = vars.get("TOKEN_URI");
 
 import contract from '../artifacts/contracts/BrenkibERC20.sol/BrenkibERC20.json'

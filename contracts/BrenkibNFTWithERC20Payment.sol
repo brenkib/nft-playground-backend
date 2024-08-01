@@ -42,7 +42,6 @@ contract BrenkibNFT_2 is ERC721Enumerable, ERC721URIStorage, Ownable {
     }
 
     function safeMint(address to, string memory uri) public {
-        //require(acceptedToken.transferFrom(msg.sender, address(this), mintPrice), "Payment failed");
         if(_acceptedToken.transferFrom(msg.sender, address(this), _mintPrice) == false) {
             revert ERC20TokenPaymentFailed(msg.sender);
         }
